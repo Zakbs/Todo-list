@@ -1,0 +1,43 @@
+import { Component, OnInit } from '@angular/core';
+import { faTrash, faList, faPenToSquare} from '@fortawesome/free-solid-svg-icons';
+import { TodoService } from '../todo.service';
+import { Todo } from '../todo';
+
+@Component({
+  selector: 'app-todo-list',
+  templateUrl: './todo-list.component.html',
+  styleUrls: ['./todo-list.component.css']
+})
+export class TodoListComponent implements OnInit{
+  faT =faTrash
+  faL = faList
+  faP = faPenToSquare
+  
+  todoList!:Todo[]
+  constructor (public todoService : TodoService){}
+  ngOnInit(): void {
+    this.todoService.getTodoList().subscribe(
+      response => this.todoList=response
+    )
+  }
+  
+  deleteTodo(todo:Todo){
+  
+    this.todoService.deleteTodo(todo).subscribe(
+      response=>{
+        this.todoList=response
+        this.ngOnInit()
+      }
+    )
+  }
+  
+  selectedTodo!:Todo
+  selectTodo(todo:Todo){
+    
+    this.todoService.getTodoByid(todo).subscribe(
+      response=>this.selectedTodo=response
+    )
+  }
+  
+  
+  }
